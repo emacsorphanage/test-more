@@ -104,12 +104,12 @@
 (defun test-more:ok (test &optional desc)
   (test-more:test (not (null test)) t desc))
 
-(defun test-more:is (got expected &rest args)
-  (or (test-more:test got expected args)
+(defun test-more:is (got expected &optional desc)
+  (or (test-more:test got expected desc)
       (test-more:format "#    got: %s   expected: %s\n" got expected)))
 
-(defun test-more:isnt (got expected &rest args)
-  (or (test-more:test got expected args)
+(defun test-more:isnt (got expected &optional desc)
+  (or (test-more:test got expected desc)
       (test-more:format "#    got: %s   not expected: %s\n" got expected)))
 
 (defun test-more:diag (desc)
