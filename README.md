@@ -29,6 +29,7 @@ EL-TEST-MORE is inspired by Perl's Test::More and Common Lisp's CL-TEST-MORE.
 * is-error
 * is-type
 * like
+* todo
 * skip
 * pass
 * fail
