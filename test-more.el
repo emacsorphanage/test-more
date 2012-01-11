@@ -82,10 +82,10 @@
    ((eq test-more:plan :unspecified)
     (test-more:format "# Tests were run but no plan was declared\n"))
    ((and test-more:plan (not (= test-more:counter test-more:plan)))
-    (test-more:format "# Looks like you planned %d tests but ran %d\n"
+    (test-more:format "#  Looks like you planned %d tests but ran %d\n"
                       test-more:plan test-more:counter)))
   (when (< 0 test-more:failed)
-    (test-more:format "# Looks like you failed %d tests of %d run\n"
+    (test-more:format "#  Looks like you failed %d tests of %d run\n"
                       test-more:failed test-more:counter))
   (unless noninteractive
     (pop-to-buffer test-more:buffer-name))
