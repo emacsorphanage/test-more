@@ -46,6 +46,7 @@
     "like"
     "plan"
     "skip"
+    "todo"
     "pass"
     "fail"
     "finalize"
@@ -94,11 +95,17 @@
   (incf test-more:counter)
   (let* ((res (funcall (or test test-more:default-test-function)
                        got expected)))
-    (test-more:format "%sok %d - %s\n"
+    (test-more:format "%sok %d - %s%s\n"
                       (if res "" "not ")
-                      test-more:counter desc)
+                      test-more:counter desc
+                      (or (and test-more:todo-desc
+                               (format " # TODO %s" test-more:todo-desc))
+                          ""))
     (when (not res)
-      (incf test-more:failed))
+      (incf test-more:failed)
+      (if test-more:todo-desc
+          (test-more:format "#  Failed (TODO) test '%s'\n"
+                            test-more:todo-desc)))
     res))
 
 (defun test-more:ok (test &optional desc)
@@ -127,6 +134,13 @@
   (dotimes (i (or how-many 1))
     (incf test-more:counter)
     (test-more:format "ok %d # skip: %s" test-more:counter why)))
+
+(defvar test-more:todo-desc nil
+  "Description of TODO(likes Test::More $TODO)")
+
+(defmacro test-more:todo (msg &rest body)
+  `(let ((test-more:todo-desc ,msg))
+     ,@body))
 
 (defmacro test-more:is-print (got expected &optional desc)
   (let ((res (gensym)))
