@@ -1,6 +1,6 @@
 ;;; test-more.el --- Test framework like Perl's Test::More
 
-;; Copyright (C) 2011  by Syohei YOSHIDA
+;; Copyright (C) 2011, 2012 by Syohei YOSHIDA
 
 ;; Author: Syohei YOSHIDA <syohex@gmail.com>
 ;; URL:
