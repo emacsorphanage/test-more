@@ -62,17 +62,23 @@
 (test-more:init)
 
 (defmacro test-more:format (fmt &rest args)
-  (let ((str (gensym)))
+  (let ((str (gensym))
+        (func (gensym)))
     `(with-current-buffer (get-buffer ,test-more:buffer-name)
-       (let ((,str (format ,fmt ,@args)))
-         (if noninteractive
-             (princ ,str)
-           (insert ,str))))))
+       (let ((,func (if noninteractive #'princ #'insert)))
+         (if test-more:subtest-p
+             (funcall ,func "    "))
+         (let ((,str (format ,fmt ,@args)))
+           (funcall ,func ,str))))))
 
 (defun test-more:plan (num)
   (setf test-more:plan num)
   (when num
     (test-more:format "1..%d\n" num)))
+
+(defun test-more:fail-message (failed tests)
+  (test-more:format "#  Looks like you failed %d tests of %d run\n"
+                    failed tests))
 
 (defun test-more:finalize ()
   (cond
@@ -82,24 +88,41 @@
     (test-more:format "#  Looks like you planned %d tests but ran %d\n"
                       test-more:plan test-more:counter)))
   (when (< 0 test-more:failed)
-    (test-more:format "#  Looks like you failed %d tests of %d run\n"
-                      test-more:failed test-more:counter))
+    (test-more:fail-message test-more:failed test-more:counter))
   (unless noninteractive
     (pop-to-buffer test-more:buffer-name))
   (setf test-more:plan :unspecified test-more:counter 0 test-more:failed 0))
 
+(defun test-more:increment-counter ()
+  (if test-more:subtest-p
+      (incf test-more:subtest-counter)
+    (incf test-more:counter)))
+
+(defun test-more:increment-failed ()
+  (if test-more:subtest-p
+      (incf test-more:subtest-failed)
+    (incf test-more:failed)))
+
+(defun test-more:get-counter ()
+  (if test-more:subtest-p
+      test-more:subtest-counter
+    test-more:counter))
+
 (defun test-more:test (got expected desc &optional test)
-  (incf test-more:counter)
+  (test-more:increment-counter)
   (let* ((res (funcall (or test test-more:default-test-function)
                        got expected)))
     (test-more:format "%sok %d - %s%s\n"
                       (if res "" "not ")
-                      test-more:counter desc
+                      (test-more:get-counter)
+                      desc
                       (or (and test-more:todo-desc
                                (format " # TODO %s" test-more:todo-desc))
                           ""))
     (when (not res)
-      (incf test-more:failed)
+      (if test-more:subtest-p
+          (setq test-more:subtest-failed-p t))
+      (test-more:increment-failed)
       (if test-more:todo-desc
           (test-more:format "#  Failed (TODO) test '%s'\n"
                             test-more:todo-desc)))
@@ -144,6 +167,25 @@
   (let ((res (gensym)))
     `(let ((,res (with-output-to-string ,got)))
        (test-more:test ,res ,expected ,desc))))
+
+(defvar test-more:subtest-p nil
+  "Flag of enable subtest")
+
+(defvar test-more:subtest-failed-p nil
+  "Flag of enable subtest")
+
+(defvar test-more:subtest-counter 0)
+(defvar test-more:subtest-failed  0)
+
+(defmacro test-more:subtest (desc &rest body)
+  `(let ((test-more:subtest-failed-p nil))
+     (setq test-more:subtest-counter 0
+           test-more:subtest-failed  0)
+     (let ((test-more:subtest-p t))
+       ,@body
+       (test-more:fail-message test-more:subtest-failed
+                               test-more:subtest-counter))
+     (test-more:test (not test-more:subtest-failed-p) t ,desc)))
 
 (defun test-more:pass (desc)
   (test-more:test t t desc))
