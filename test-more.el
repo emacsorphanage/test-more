@@ -131,7 +131,7 @@
   (let ((i (gensym)))
     `(dotimes (,i (or ,how-many 1))
        (incf test-more:counter)
-       (test-more:format "ok %d # skip: %s" test-more:counter ,why))))
+       (test-more:format "ok %d # skip: %s\n" test-more:counter ,why))))
 
 (defvar test-more:todo-desc nil
   "Description of TODO(likes Test::More $TODO)")
