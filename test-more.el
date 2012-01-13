@@ -40,17 +40,14 @@
     "is"
     "isnt"
     "diag"
-    "is-print"
-    "is-error"
     "is-type"
     "like"
     "plan"
-    "skip"
-    "todo"
     "pass"
     "fail"
     "finalize"
-    ))
+    )
+  "Symbols inported by calling `test-more:import'")
 
 (defun test-more:import ()
   (dolist (name test-more:symbol-names)
@@ -130,10 +127,11 @@
   (or (test-more:test (not (null (string-match regex got))) t desc)
       (test-more:format "#    got: %s    like: %s\n" got regexp)))
 
-(defun test-more:skip (why how-many)
-  (dotimes (i (or how-many 1))
-    (incf test-more:counter)
-    (test-more:format "ok %d # skip: %s" test-more:counter why)))
+(defmacro test-more:skip (why how-many &rest body)
+  (let ((i (gensym)))
+    `(dotimes (,i (or ,how-many 1))
+       (incf test-more:counter)
+       (test-more:format "ok %d # skip: %s" test-more:counter ,why))))
 
 (defvar test-more:todo-desc nil
   "Description of TODO(likes Test::More $TODO)")
