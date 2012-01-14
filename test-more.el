@@ -136,11 +136,11 @@
       (test-more:format "#    got: %s   expected: %s\n" got expected)))
 
 (defun test-more:isnt (got expected &optional desc)
-  (or (test-more:test got expected desc)
+  (or (test-more:test got expected desc t)
       (test-more:format "#    got: %s   not expected: %s\n" got expected)))
 
 (defun test-more:diag (desc)
-  (test-more:format "# %s" desc))
+  (test-more:format "# %s\n" desc))
 
 (defun test-more:is-type (got expected-type &optional desc)
   (or (test-more:test (typep got expected-type) t desc)
