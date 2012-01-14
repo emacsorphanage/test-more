@@ -30,7 +30,6 @@
 (defvar test-more:failed 0)
 (defvar test-more:default-test-function #'equal)
 (defvar test-more:tests nil)
-;;(defvar *test-result-output* *standard-output*)
 
 (defvar test-more:buffer-name "*test-more*")
 
