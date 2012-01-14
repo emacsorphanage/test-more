@@ -108,10 +108,12 @@
       test-more:subtest-counter
     test-more:counter))
 
-(defun test-more:test (got expected desc &optional test)
+(defun test-more:test (got expected desc &optional notp test)
   (test-more:increment-counter)
-  (let* ((res (funcall (or test test-more:default-test-function)
-                       got expected)))
+  (let ((res (funcall (or test test-more:default-test-function)
+                      got expected)))
+    (if notp
+        (setq res (not res)))
     (test-more:format "%sok %d - %s%s\n"
                       (if res "" "not ")
                       (test-more:get-counter)
