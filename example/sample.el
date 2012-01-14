@@ -1,7 +1,7 @@
 (require 'test-more)
 (test-more:import) ;; use test functions(not macros) without 'test-more:' prefix
 
-(plan 12)
+(plan 14)
 
 (ok (typep "This is String" 'string) "first argument is true")
 
@@ -26,6 +26,11 @@
 (test-more:subtest "subtest"
                    (ok 1 "subtest 1")
                    (ok nil "subtest 2"))
+
+(test-more:is-print (princ "hello") "hello"
+                    "first argument outputs string of second argument to stdout")
+
+(test-more:is-error (error "error") "first argument throws exception")
 
 (pass "always pass")
 (fail "always fail")
