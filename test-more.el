@@ -184,9 +184,10 @@
            test-more:subtest-failed  0)
      (let ((test-more:subtest-p t))
        ,@body
-       (test-more:plan test-more:subtest-counter)
-       (test-more:fail-message test-more:subtest-failed
-                               test-more:subtest-counter))
+       (test-more:format "1..%d\n" test-more:subtest-counter)
+       (if (> test-more:subtest-failed 0)
+           (test-more:fail-message test-more:subtest-failed
+                                   test-more:subtest-counter)))
      (test-more:test (not test-more:subtest-failed-p) t ,desc)))
 
 (defmacro test-more:done-testing (&rest body)
