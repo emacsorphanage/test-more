@@ -172,7 +172,7 @@
   "Flag of enable subtest")
 
 (defvar test-more:subtest-failed-p nil
-  "Flag of enable subtest")
+  "Flag of tests in subtest is failed")
 
 (defvar test-more:subtest-counter 0)
 (defvar test-more:subtest-failed  0)
