@@ -148,8 +148,8 @@
   (or (test-more:test (typep got expected-type) t desc)
       (test-more:format "#    got: %s    expected type: %s\n" got expected-type)))
 
-(defun test-more:like (got regex &optional desc)
-  (or (test-more:test (not (null (string-match regex got))) t desc)
+(defun test-more:like (got regexp &optional desc)
+  (or (test-more:test (not (null (string-match regexp got))) t desc)
       (test-more:format "#    got: %s    like: %s\n" got regexp)))
 
 (defmacro test-more:skip (why how-many &rest body)
