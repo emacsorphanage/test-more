@@ -42,6 +42,7 @@
     "is-type"
     "like"
     "plan"
+    "skip"
     "pass"
     "fail"
     "finalize"
@@ -151,11 +152,10 @@
   (or (test-more:test (not (null (string-match regexp got))) t desc)
       (test-more:format "#    got: %s    like: %s\n" got regexp)))
 
-(defmacro test-more:skip (why how-many)
-  (let ((i (gensym)))
-    `(dotimes (,i (or ,how-many 1))
-       (incf test-more:counter)
-       (test-more:format "ok %d # skip: %s\n" test-more:counter ,why))))
+(defun test-more:skip (why how-many)
+  (dotimes (i (or how-many 1))
+    (incf test-more:counter)
+    (test-more:format "ok %d # skip: %s\n" test-more:counter why)))
 
 (defvar test-more:todo-desc nil
   "Description of TODO(likes Test::More $TODO)")
