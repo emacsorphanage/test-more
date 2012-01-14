@@ -3,7 +3,7 @@
 ;; Copyright (C) 2011, 2012 by Syohei YOSHIDA
 
 ;; Author: Syohei YOSHIDA <syohex@gmail.com>
-;; URL:
+;; URL: https://github.com/syohex/emacs-test-more
 ;; Version: 0.1
 
 ;; EL-TEST-MORE is freely distributable under the MIT License
