@@ -54,11 +54,11 @@
           (alias (intern (format "%s" name))))
       (fset alias real))))
 
-(defun test-more:init ()
+(defun test-more:erase-buffer ()
   (with-current-buffer (get-buffer-create test-more:buffer-name)
     (erase-buffer)))
 
-(test-more:init)
+(test-more:erase-buffer)
 
 (defmacro test-more:format (fmt &rest args)
   (let ((str (gensym))
