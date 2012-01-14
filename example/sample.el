@@ -14,10 +14,11 @@
 
 (like "987" "^[0-9]+$" "first argument matchs second argument which is regexp")
 
-(test-more:skip "skips tests Like Test::More SKIP block"
-                2 ;; skip 2 tests
-                (ok (not-implement) "not implemented now 1")
-                (is (not-implement) "not implemented now 2"))
+(if (not (string= system-type 'gnu/linux))
+    (test-more:skip "skips tests if system is not Linux" 2)
+  (progn
+    (test-more:ok (executable-find "emacs") "has emacs")
+    (test-more:isnt (symbol-name system-type) "macosx" "not mac")))
 
 (test-more:todo "Like Test::More TODO block"
                 (test-more:ok nil "todo1")
