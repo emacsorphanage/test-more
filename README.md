@@ -1,5 +1,4 @@
 # EL-TEST-MORE - Emacs test frameworket like Perl's Test::More
-
 EL-TEST-MORE is inspired by Perl's Test::More and Common Lisp's CL-TEST-MORE.
 EL-TEST-MORE support TAP(Test Anything Protocol), so that you can test elisp
 by prove command.
@@ -55,9 +54,10 @@ Skip $how-many tests.
 
 Always pass.
 
-* test-more:fail
+* test-more:fail($desc)
 
 Always failed.
+
 
 ## Test Macros
 
@@ -79,6 +79,46 @@ Like Perl Test::More TODO block.
 Like Perl Test::More subtest. Group similar tests.
 Tests in `test-more:subtest` is treated one test.
 
-* test-more:done-testing
+* test-more:done-testing($forms)
 
 Like Perl Test::More done-testing.
+
+
+## Call Test Functions without test-more:prefix
+
+You call `(test-more:import)` at first.
+
+
+## Support TAP(Test Anything Protocol)
+
+EL-TEST-MORE supports TAP(Test Anything Protocol).
+You evaluate following elisp
+
+    (require 'test-more)
+    (test-more:import)
+
+    (plan 4)
+
+    (ok (typep "This is String" 'string) "first argument is true")
+
+    (is '(a b) '(a b) "first argument equals to second argument")
+    (like "987" "^[0-9]+$" "first argument matchs second argument which is regexp")
+
+    (fail "Failing test")
+
+    (finalize)
+
+You get following output
+
+    1..4
+    ok 1 - first argument is true
+    ok 2 - first argument equals to second argument
+    ok 3 - first argument matchs second argument which is regexp
+    not ok 4 - Failing test
+    #  Looks like you failed 1 tests of 4 run
+
+## Run test with *prove*
+
+You can test elisp file with following prove command
+
+    prove -v --exec='emacs -Q --batch -l test-more.el -l' test_files
