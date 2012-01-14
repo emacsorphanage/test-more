@@ -114,10 +114,10 @@
                       got expected)))
     (if notp
         (setq res (not res)))
-    (test-more:format "%sok %d - %s%s\n"
+    (test-more:format "%sok %d%s%s\n"
                       (if res "" "not ")
                       (test-more:get-counter)
-                      desc
+                      (if desc (format " - %s" desc) "")
                       (or (and test-more:todo-desc
                                (format " # TODO %s" test-more:todo-desc))
                           ""))
