@@ -151,7 +151,7 @@
   (or (test-more:test (not (null (string-match regexp got))) t desc)
       (test-more:format "#    got: %s    like: %s\n" got regexp)))
 
-(defmacro test-more:skip (why how-many &rest body)
+(defmacro test-more:skip (why how-many)
   (let ((i (gensym)))
     `(dotimes (,i (or ,how-many 1))
        (incf test-more:counter)
