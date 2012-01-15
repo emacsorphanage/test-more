@@ -43,7 +43,7 @@ Test $got equals to $expected. default test function is `equal`.
 
 Test $got does *not* equals to $expected. default test function is `equal`.
 
-* test-more:diag(diag)
+* test-more:diag($diag)
 
 Output $diag as diagnostics
 
