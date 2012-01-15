@@ -22,6 +22,14 @@ by prove command.
 
 ## Test Functions
 
+* test-more:plan($num)
+
+Plan to test $num tests. You should call `test-more:plan` at first.
+
+* test-more:finalize
+
+Finalize this test file. You should call `test-more:finalize` at last.
+
 * test-more:ok($got [$desc])
 
 Test $got is true.
