@@ -31,6 +31,7 @@
 (defvar test-more:default-test-function #'equal)
 (defvar test-more:tests nil)
 
+(defvar test-more:output-strings nil)
 (defvar test-more:buffer-name "*test-more*")
 
 (defvar test-more:symbol-names
@@ -55,21 +56,17 @@
           (alias (intern (format "%s" name))))
       (fset alias real))))
 
-(defun test-more:erase-buffer ()
-  (with-current-buffer (get-buffer-create test-more:buffer-name)
-    (erase-buffer)))
-
-(test-more:erase-buffer)
+(defun test-more:append-output-string (str)
+  (push str test-more:output-strings))
 
 (defmacro test-more:format (fmt &rest args)
   (let ((str (gensym))
         (func (gensym)))
-    `(with-current-buffer (get-buffer ,test-more:buffer-name)
-       (let ((,func (if noninteractive #'princ #'insert)))
-         (if test-more:subtest-p
-             (funcall ,func "    "))
-         (let ((,str (format ,fmt ,@args)))
-           (funcall ,func ,str))))))
+    `(let ((,func (if noninteractive #'princ #'test-more:append-output-string)))
+       (if test-more:subtest-p
+           (funcall ,func "    "))
+       (let ((,str (format ,fmt ,@args)))
+         (funcall ,func ,str)))))
 
 (defun test-more:plan (num)
   (setf test-more:plan num)
@@ -89,9 +86,15 @@
                       test-more:plan test-more:counter)))
   (when (< 0 test-more:failed)
     (test-more:fail-message test-more:failed test-more:counter))
+  (with-current-buffer (get-buffer-create test-more:buffer-name)
+    (erase-buffer)
+    (insert (mapconcat #'identity (reverse test-more:output-strings) "")))
   (unless noninteractive
     (pop-to-buffer test-more:buffer-name))
-  (setf test-more:plan :unspecified test-more:counter 0 test-more:failed 0))
+  (setf test-more:plan :unspecified
+        test-more:counter 0
+        test-more:failed 0
+        test-more:output-strings nil))
 
 (defun test-more:increment-counter ()
   (if test-more:subtest-p
