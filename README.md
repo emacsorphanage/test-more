@@ -131,3 +131,15 @@ You get following output
 You can test elisp file with following prove command
 
     prove -v --exec='emacs -Q --batch -l test-more.el -l' test_files
+
+To write `.proverc` makes you test easily.
+
+    --exec "emacs -Q --batch -L ~/.emacs.d/auto-install -l test-more.el -l"
+    --color
+    --merge
+    --timer
+    -w
+
+and you can use following command for testing
+
+    prove -v test_files
