@@ -1,0 +1,5 @@
+--exec "emacs -Q --batch -L ~/.emacs.d/auto-install -l test-more.el -l"
+--color
+--merge
+--timer
+-w
