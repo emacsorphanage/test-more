@@ -14,3 +14,6 @@
                    (test-more:is-error (add 1 nil) "invalid argument"))
 
 (finalize)
+
+;;;; run tests to evaluate following S-exp
+;; (eval-buffer)

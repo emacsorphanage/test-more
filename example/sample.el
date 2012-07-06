@@ -37,3 +37,6 @@
 (fail "always fail")
 
 (finalize)
+
+;;;; run tests to evaluate following S-exp
+;; (eval-buffer)
