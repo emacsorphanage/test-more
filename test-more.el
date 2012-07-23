@@ -36,6 +36,29 @@
 (eval-when-compile
   (require 'cl))
 
+(defgroup test-more nil
+  "Test::More in Emacs Lisp"
+  :group 'test-more)
+
+(defface test-more:ok-face
+  '((t (:foreground "green")))
+  "Face of passed test"
+  :group 'test-more)
+
+(defface test-more:not-ok-face
+  '((t (:foreground "red")))
+  "Face ok failed test"
+  :group 'test-more)
+
+(defvar test-more:ok-face 'test-more:ok-face)
+(defvar test-more:not-ok-face 'test-more:not-ok-face)
+
+(define-generic-mode test-more-mode
+  nil nil
+  '(("^\s*ok.+$" . test-more:ok-face)
+    ("^\s*\\(not ok\\|Failed\\).+$" . test-more:not-ok-face))
+  nil nil)
+
 (defvar test-more:plan :unspecified)
 (defvar test-more:counter 0)
 (defvar test-more:failed 0)
@@ -101,7 +124,8 @@
     (erase-buffer)
     (insert (mapconcat #'identity (reverse test-more:output-strings) "")))
   (unless noninteractive
-    (pop-to-buffer test-more:buffer-name))
+    (pop-to-buffer test-more:buffer-name)
+    (test-more-mode))
   (setf test-more:plan :unspecified
         test-more:counter 0
         test-more:failed 0
